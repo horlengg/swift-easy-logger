@@ -4,6 +4,17 @@ A lightweight Swift logging plugin powered by Socket.IO that streams logs in rea
 
 -----
 
+
+<br>
+<br>
+
+![log-dashboard.png](https://github.com/horlengg/easy-logger-server/raw/main/log-dashboard.png)
+
+![json-viewer.png](https://github.com/horlengg/easy-logger-server/raw/main/json-viewer.png)
+
+<br>
+<br>
+
 ## Requirements
 
 - iOS 14+
@@ -250,3 +261,11 @@ EasyLogger emits the following Socket.IO events to the server:
 - `EasyLogger` is a `@MainActor` singleton — all calls are thread-safe when made from the main thread.
 - Logs are **silently dropped** when `enable` is `false` (no overhead in production).
 - The socket auto-reconnects on disconnect.
+
+
+
+## Contact Me
+
+If you have any questions, suggestions, or issues, feel free to reach out via my website:
+
+👉 [Website](https://horleng.vercel.app)
