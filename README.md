@@ -1,4 +1,3 @@
-
 # EasyLogger
 
 A lightweight Swift logging plugin powered by Socket.IO that streams logs in real time to a remote log viewer server.
@@ -9,7 +8,74 @@ A lightweight Swift logging plugin powered by Socket.IO that streams logs in rea
 
 - iOS 14+
 - [SocketIO-Client-Swift](https://github.com/socketio/socket.io-client-swift)
-- A running log viewer server (e.g. Node.js + Socket.IO on port `3000`)
+- [easy-logger-server](https://github.com/horlengg/easy-logger-server) running on the same Wi-Fi network (Node.js 18+, or Docker)
+
+-----
+
+## Server Setup
+
+EasyLogger requires the [easy-logger-server](https://github.com/horlengg/easy-logger-server) running on the same local network as your device.
+
+> **Source:** [github.com/horlengg/easy-logger-server](https://github.com/horlengg/easy-logger-server)
+
+The server is a Node.js + Express + Socket.IO app. It binds to your machine’s local IP and port so your iOS device (on the same Wi-Fi) can reach it.
+
+```js
+const PORT = process.env.PORT || 3000;
+const host = process.env.HOST_IP || "172.20.10.12" // Your machine's local IP
+const uri = `http://${host}:${PORT}`
+```
+
+### Option A — Run directly with Node
+
+```bash
+# Clone the repo
+git clone https://github.com/horlengg/easy-logger-server.git
+cd easy-logger-server
+
+# Install dependencies (Express 5, Socket.IO 4)
+npm install
+
+# Start with your machine's local IP
+HOST_IP=172.20.10.12 node server.js
+
+# Or just use the default IP hardcoded in server.js
+npm start
+```
+
+The log viewer UI will be available at `http://<your-ip>:3000` in your browser.
+
+### Option B — Run with Docker
+
+```bash
+# Build the image
+docker build -t easy-logger-server .
+
+# Run with your local IP passed as an env variable
+docker run -p 3000:3000 -e HOST_IP=172.20.10.12 easy-logger-server
+```
+
+The Dockerfile uses `node:18-alpine` and exposes port `3000`.
+
+### Finding your local IP
+
+Your device and Mac must be on the **same Wi-Fi network**.
+
+```bash
+# macOS — look for en0 inet address
+ifconfig en0 | grep "inet "
+```
+
+Example output: `inet 172.20.10.12 netmask 0xffffff00`
+
+Use that IP in both your server startup and in `EasyLogger.shared.initialize(...)`.
+
+### Environment Variables
+
+|Variable |Default       |Description                  |
+|---------|--------------|-----------------------------|
+|`HOST_IP`|`172.20.10.12`|Your machine’s LAN IP address|
+|`PORT`   |`3000`        |Port the server listens on   |
 
 -----
 
@@ -55,7 +121,6 @@ struct ChatAppApp: App {
     }
 }
 ```
-
 
 -----
 
